@@ -66,7 +66,7 @@
 
 (defun spotify-search (search-term)
   "Search spotify for SEARCH-TERM, returning the results as a Lisp structure."
-  (let ((a-url (format "http://ws.spotify.com/search/1/track.json?q=%s" search-term)))
+  (let ((a-url (format "http://api.spotify.com/v1/search?type=track&q=%s" search-term)))
     (with-current-buffer
 	(url-retrieve-synchronously a-url)
       (goto-char url-http-end-of-headers)
@@ -75,7 +75,7 @@
 (defun spotify-format-track (track)
   "Given a TRACK, return a a formatted string suitable for display."
   (let ((track-name   (alist-get '(name) track))
-	(track-length (alist-get '(length) track))
+        (track-length (/ (alist-get '(duration_ms) track) 1000))
 	(album-name   (alist-get '(album name) track))
 	(artist-names (mapcar (lambda (artist)
 				(alist-get '(name) artist))
@@ -89,7 +89,7 @@
 (defun spotify-search-formatted (search-term)
   (mapcar (lambda (track)
 	    (cons (spotify-format-track track) track))
-	  (alist-get '(tracks) (spotify-search search-term))))
+          (alist-get '(tracks items) (spotify-search search-term))))
 
 
 (defun helm-spotify-search ()
