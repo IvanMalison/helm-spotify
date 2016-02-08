@@ -57,12 +57,11 @@
 
 (defun spotify-play-track (track)
   "Get the Spotify app to play the TRACK."
-  (spotify-play-href (alist-get '(href) track)))
+  (spotify-play-href (alist-get '(uri) track)))
 
 (defun spotify-play-album (track)
   "Get the Spotify app to play the album for this TRACK."
-  (spotify-play-href (alist-get '(album href) track)))
-
+  (spotify-play-href (alist-get '(album uri) track)))
 
 (defun spotify-search (search-term)
   "Search spotify for SEARCH-TERM, returning the results as a Lisp structure."
